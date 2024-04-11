@@ -1,0 +1,30 @@
+<h1>Lista de productos Mock</h1>
+
+<section id="productos">
+    <div>
+
+        {{#each products}}
+        <div>
+            <a href="/">
+                <h2>{{title}}</h2>
+            </a>
+            <h3>${{price}}</h3>
+            <ul>
+                <li>ID: {{code}}</li>
+                <li>Categoría: {{category}}</li>
+                <li>{{description}}</li>
+                <li>Stock disponible: {{stock}}</li>
+            </ul>
+            <button onclick="addToCart('{{_id}}','{{../cartCode}}')">Agregar al carrito!</button>
+        </div>
+        {{/each}}
+        {{#if hasPrevPage}}
+        <a href="?page={{prevPage}}"><button>Anterior</button></a>
+        {{/if}}
+        <p>Página {{page}} de {{totalPages}}</p>
+        {{#if hasNextPage}}
+        <a href="?page={{nextPage}}"><button>Siguiente</button></a>
+        {{/if}}
+    </div>
+</section>
+<script src="/js/product.js"></script>

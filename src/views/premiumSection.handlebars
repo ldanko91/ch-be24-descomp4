@@ -1,0 +1,19 @@
+<h1>Bienvenido usuario Premium!</h1>
+<section id="perfil">
+    <div>
+        <ul>
+            <li>Nombre completo: {{profile.first_name}} {{profile.last_name}}</li>
+            <li>ID: {{profile._id}}</li>
+            <li>{{profile.email}}</li>
+            <li>Edad: {{profile.age}}</li>
+            <li>Rol: {{profile.role}}</li>
+        </ul>
+    </div>
+
+    <a href="/api/products/backoffice">
+        <h2>Ir al administrador de productos</h2>
+    </a>
+    <a href="/api/products">
+        <h3>Volver al listado general</h3>
+    </a>
+</section>

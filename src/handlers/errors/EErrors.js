@@ -1,0 +1,11 @@
+const EErrors = {
+    BAD_REQUEST: 400,
+    UNAUTHORIZED: 401,
+    INVALID_USER_INFO: 412,
+    NOT_FOUND: 404,
+    DATABASE_ERROR: 500,
+    INTERNAL_SERVER_ERROR: 500,
+    SERVER_GATEWAY_ERROR: 502,
+}
+
+export default EErrors

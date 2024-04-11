@@ -1,0 +1,37 @@
+<h1>Productos en el carrito</h1>
+<h2>ID:{{ccod}}</h2>
+
+<button onclick="goPurchase('{{ccod}}')">Confirmar compra!</button>
+
+<section id="carrito">
+    <div>
+
+
+        <div>
+            {{#each products}}
+            <h3>{{this.id.title}}</h3>
+            <li>Cantidad: {{this.quantity}}</li>
+
+            <ul>
+                <li>{{this.id.description}}</li>
+                <li>Categoría:{{this.id.category}}</li>
+                <li>Código:{{this.id.code}}</li>
+                <li>Stock:{{this.id.stock}}</li>
+                <li>ID:{{this.id._id}}</li>
+            </ul>
+            <button onclick="delFromCart('{{_id}}','{{../ccod}}')">Eliminar del carrito</button>
+            {{/each}}
+
+
+        </div>
+        {{#if hasPrevPage}}
+        <a href="./products/{{prevPage}}"><button>Anterior</button></a>
+        {{/if}}
+
+        {{#if hasNextPage}}
+        <a href="products/?page={{nextPage}}"><button>Siguiente</button></a>
+        {{/if}}
+    </div>
+</section>
+<button onclick="emptyCart('{{ccod}}')">Vaciar carrito</button>
+<script src="/js/carts.js"></script>
