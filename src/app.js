@@ -11,7 +11,7 @@ import logger from "./utils/middlewares/logs/logger.middleware.js";
 
 //CONFIG SERVER y DB
 const app = express()
-app.use(logger)
+// app.use(logger)
 app.use(ErrorMiddleware)
 const httpServer = app.listen(serverConfig.ExpressPort,
     () => console.log(`Servidor conectado al puerto: ${serverConfig.ExpressPort}`))

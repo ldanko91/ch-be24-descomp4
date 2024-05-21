@@ -4,6 +4,9 @@ import { existsToken } from "../utils/jwt/jwtExistsToken.js";
 import { passportCall } from "../utils/jwt/jwtPassportCall.js";
 import loginController from "../controllers/login.controller.js";
 import { uuid } from "uuidv4";
+import createHash from "../utils/bcrypt/bryptCreateHash.js";
+import { generateNewPassToken } from "../utils/jwt/jwtNewPassToken.js";
+import { newPassToken } from "../utils/jwt/jwtNewPassTokenCompare.js";
 const LoginController = new loginController()
 const loginRouter = Router();
 
@@ -47,8 +50,43 @@ loginRouter.get('/fail-register', (req, res) => {
     res.status(400).json({ status: 'error', error: 'Bad request' })
 })
 
-loginRouter.post('/forgot-password', async (req, res) => {
-    return await LoginController.forgotPasswordPost(req, res)
+
+loginRouter.get('/recovery', async (req, res) => {
+    return res.render('passRecovery', {
+        title: `Reinicio de contraseña`
+    })
 })
+
+loginRouter.post('/recovery', async (req, res) => {
+    let newPassToken = await generateNewPassToken({ mail: req.body.email })
+    await LoginController.recoveryEmailPost(req.body.email)
+    res.cookie('newPassToken', newPassToken, {
+        httpOnly: true,
+    }).redirect('/api/sessions/recoveryRedirect');
+}
+);
+
+loginRouter.get('/recoveryRedirect', newPassToken, async (req, res) => {
+    return res.render('recoveryRedirect', {
+        title: `Reinicio de contraseña`
+    })
+}
+);
+
+loginRouter.get('/continueRecovery', newPassToken, async (req, res) => {
+    return res.render('continueRecovery', {
+        title: `Reinicia tu contraseña`
+    })
+})
+
+loginRouter.post('/continueRecovery', async (req, res) => {
+    const cypherOldPass = await createHash(req.body.oldPasword)
+    const cypherNewPass = await createHash(req.body.newPasword)
+    console.log(cypherOldPass)
+    await LoginController.resetPassword(req.body.email, cypherOldPass, cypherNewPass)
+
+    return
+}
+);
 
 export default loginRouter;

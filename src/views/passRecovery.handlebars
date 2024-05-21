@@ -1,0 +1,16 @@
+<h1>Reestablecer contraseña</h1>
+<h4>Completa el formulario con tu mail, y si eres un usuario registrado recibirás un correo para reiniciar la
+    contraseña</h4>
+<form action="login" id="recoveryForm">
+    <label for="userMail">Usuario</label>
+    <input type="mail" id="userMail" name="email">
+    <input type="submit" value="Enviar" id="sendLogin">
+</form>
+<a href="/api/sessions/githubLogin">
+    <h3>Login con Github</h3>
+</a>
+<h3>¿Aún no tienes un usuario?</h3>
+<a href="/api/sessions/register">
+    <h3>Registrate aquí</h3>
+</a>
+<script src="/js/recovery.js"></script>

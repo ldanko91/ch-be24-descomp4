@@ -9,6 +9,8 @@ import ERROR_TYPES from "../handlers/errors/ErrorTypes.js";
 import ERROR_CAUSES from "../handlers/errors/ErrorCauses.js";
 import EErrors from "../handlers/errors/EErrors.js";
 import CustomError from "../handlers/errors/CustomError.js";
+import recoveryNodemailerTransport from "../utils/nodemailer/recoveryNodemailer.js";
+import { RecoveryNodemailerConfig } from "../config/recoveryNodemailer.config.js";
 const DBUsersController = new dbUsersController();
 
 export default class loginController {
@@ -102,14 +104,44 @@ export default class loginController {
 
     };
 
-    forgotPasswordPost = async (req, res) => {
+
+    recoveryEmailPost = async (email, req, res) => {
         try {
-            const { email, password } = req.body
-            const passwordEncrypted = createHash(password)
-            await DBUsersController.updateUserByEmail({ email }, { password: passwordEncrypted })
-            res.status(200).json({ status: 'Success', message: 'Password updated' })
+
+            console.log(email)
+            const user = await DBUsersController.getUserByEmail(email)
+            if (!user) return;
+
+            await recoveryNodemailerTransport.sendMail({
+                from: RecoveryNodemailerConfig.recoveryNodemailerUserEmail,
+                to: email,
+                subject: 'Reinicia tu contraseña de Ecommerce Danko',
+                html: `
+                    <h1>Reinicia tu contraseña</h1>
+                    <p>Ingresa al link a continuación para reiniciar tu contraseña de acceso</p>
+                    <a href="http://localhost:8080/api/sessions/continueRecovery/"><h2>Clic aquí!</h2></a>
+                `
+            })
+            return
         } catch (error) {
-            res.status(500).json({ status: 'error', error: 'Internal Server Error' })
+            console.log(error)
+            // res.status(500).json({ status: 'error', error: 'Internal Server Error' })
+        }
+    }
+
+    resetPassword = async (email, cypherOldPass, cypherNewPass, req, res) => {
+        try {
+
+
+            const userData = await DBUsersController.getUserByEmail(email)
+            if (cypherOldPass != userData.password) {
+                console.log('contraseña incorrecta')
+                return
+            }
+            console.log('contraseña correcta')
+            return
+        } catch (error) {
+            console.log(error)
         }
     }
 }
